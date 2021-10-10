@@ -1,5 +1,6 @@
 import re
 
+
 class ExtratorUrl:
     def __init__(self, url):
         self.url = self.sanitiza_url(url)
@@ -42,10 +43,41 @@ class ExtratorUrl:
             valor = self.get_url_parametros()[indice_valor: indice_e_comercial]
         return valor
 
+    def __len__(self):
+        return len(self.url)
 
-# extrator_url = ExtratorUrl(r'bytebank.com/cambio?quantidade=150&moedaDestino=dolar&moedaOrigem=real')
-# extrator_url = ExtratorUrl(' ')
-extrator_url = ExtratorUrl(None)
+    def __str__(self):
+        return f'{self.url} \nParâmetros: {self.get_url_parametros()}\nUrl Base: {self.get_url_base()}'
 
+    def __eq__(self, other):
+        return self.url == other.url
+
+
+url = r'bytebank.com/cambio?quantidade=150&moedaOrigem=dolar&moedaDestino=real'
+extrator_url = ExtratorUrl(url)
+
+# Imprimindo informações sobre a url
+print(extrator_url)
+
+print('-' * 50)
+print(f'{"CONVERSOR DE MOEDAS":^45}')
+valor_dolar = 5.50  # 1 dólar = 5.50 reais
+moeda_origem = extrator_url.get_valor_parametro("moedaOrigem")
+moeda_destino = extrator_url.get_valor_parametro("moedaDestino")
 valor_quantidade = extrator_url.get_valor_parametro('quantidade')
-print(valor_quantidade)
+
+
+if moeda_origem == 'real':
+    total = float(valor_quantidade) / valor_dolar
+else:
+    total = float(valor_quantidade) * valor_dolar
+
+print(f'Valor convertido de {moeda_origem} para {moeda_destino}: {total:.2f} reais')
+
+
+
+
+
+
+
+
